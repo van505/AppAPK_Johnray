@@ -38,6 +38,12 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "WaraChow needs your location to find restaurants and cafes nearby."
+        }
       ]
     ],
     "experiments": {
