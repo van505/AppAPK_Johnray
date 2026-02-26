@@ -8,4 +8,4 @@
  *  4. Copy the  "API Key (v3 auth)"  and paste below
  * ─────────────────────────────────────────────────────────
  */
-export const TMDB_API_KEY = 'YOUR_TMDB_API_KEY_HERE';
+export const TMDB_API_KEY = "3ff77ec2312634e8d36b51d76bcf7b85";
