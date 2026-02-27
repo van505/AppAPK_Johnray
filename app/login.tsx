@@ -64,7 +64,7 @@ export default function LoginScreen() {
                     <View style={styles.logoBadge}>
                         <FontAwesome name="film" size={28} color={PRIMARY} />
                     </View>
-                    <Text style={styles.logoText}>CineTrack</Text>
+                    <Text style={styles.logoText}>KantoFlix</Text>
                     <Text style={styles.tagline}>Your personal movie companion 🎬</Text>
                 </View>
 
@@ -97,7 +97,7 @@ export default function LoginScreen() {
                         activeOpacity={0.85}
                         onPress={() => router.replace('/(tabs)')}
                     >
-                        <Text style={styles.loginBtnText}>Let's Watch! 🎥</Text>
+                        <Text style={styles.loginBtnText}>Let’s Watch! 🎥</Text>
                     </TouchableOpacity>
 
                     {/* Social */}
@@ -133,7 +133,7 @@ export default function LoginScreen() {
                             keyboardShouldPersistTaps="handled"
                         >
                             <View style={styles.handle} />
-                            <Text style={styles.sheetLogoHint}>CineTrack</Text>
+                            <Text style={styles.sheetLogoHint}>KantoFlix</Text>
                             <Text style={styles.sheetTitle}>Create Account</Text>
                             <View style={styles.sheetTitleUnderline} />
 
@@ -147,7 +147,7 @@ export default function LoginScreen() {
                                 activeOpacity={0.85}
                                 onPress={() => router.replace('/(tabs)')}
                             >
-                                <Text style={styles.loginBtnText}>Join CineTrack 🍿</Text>
+                                <Text style={styles.loginBtnText}>Join KantoFlix 🍿</Text>
                             </TouchableOpacity>
 
                             <Text style={styles.orText}>or sign up with</Text>

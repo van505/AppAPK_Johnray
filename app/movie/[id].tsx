@@ -14,15 +14,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useMovies } from '@/store/movie-context';
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 function formatDate(dateStr?: string) {
     if (!dateStr) return '';
     const d = new Date(dateStr);
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// ─── Screen ───────────────────────────────────────────────────────────────────
+function titleCaseCategory(category: string) {
+    return category.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 export default function MovieDetailScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -45,33 +45,28 @@ export default function MovieDetailScreen() {
         );
     }
 
-    const heroUri = movie.backdropUrl ?? movie.posterUrl;
+    const posterUri = movie.posterUrl || `https://picsum.photos/seed/movie-${movie.id}/400/600`;
+    const heroUri = movie.backdropUrl || posterUri;
 
     return (
         <SafeAreaView style={styles.root}>
             <ScrollView showsVerticalScrollIndicator={false} bounces>
-
-                {/* ── Hero / Backdrop ─────────────────────────────────────── */}
                 <View style={styles.heroWrap}>
                     <Image
                         source={{ uri: heroUri }}
                         style={styles.heroImage}
                         contentFit="cover"
                         transition={400}
-                        placeholder={{ blurhash: 'L9B[IV-=00M{~qM{WBxa00M{-;xu' }}
                     />
-                    {/* Dark gradient */}
                     <LinearGradient
                         colors={['transparent', 'rgba(13,13,26,0.9)', '#0D0D1A']}
                         style={styles.heroGradient}
                     />
 
-                    {/* Back button */}
                     <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
                         <FontAwesome name="chevron-left" size={14} color="#FFFFFF" />
                     </TouchableOpacity>
 
-                    {/* Content Rating pill (PG, R, etc.) */}
                     {movie.contentRating && (
                         <View style={styles.ratingPill}>
                             <Text style={styles.ratingPillText}>{movie.contentRating}</Text>
@@ -79,14 +74,12 @@ export default function MovieDetailScreen() {
                     )}
                 </View>
 
-                {/* ── Poster + Title (overlap hero bottom) ─────────────────── */}
                 <View style={styles.posterRowWrap}>
                     <Image
-                        source={{ uri: movie.posterUrl }}
+                        source={{ uri: posterUri }}
                         style={styles.posterSmall}
                         contentFit="cover"
                         transition={300}
-                        placeholder={{ blurhash: 'L9B[IV-=00M{~qM{WBxa00M{-;xu' }}
                     />
                     <View style={styles.titleBlock}>
                         <Text style={styles.movieTitle} numberOfLines={3}>{movie.title}</Text>
@@ -94,7 +87,6 @@ export default function MovieDetailScreen() {
                     </View>
                 </View>
 
-                {/* ── Genres ───────────────────────────────────────────────── */}
                 {movie.genres.length > 0 && (
                     <View style={styles.genreRow}>
                         {movie.genres.map((g) => (
@@ -105,7 +97,6 @@ export default function MovieDetailScreen() {
                     </View>
                 )}
 
-                {/* ── Overview ─────────────────────────────────────────────── */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>📝 Overview</Text>
                     <Text style={styles.overview}>
@@ -113,24 +104,24 @@ export default function MovieDetailScreen() {
                     </Text>
                 </View>
 
-                {/* ── Details ──────────────────────────────────────────────── */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>ℹ️ Details</Text>
                     <View style={styles.detailsCard}>
                         <DetailRow label="Release" value={formatDate(movie.releaseDate)} />
-                        <DetailRow label="Category" value={movie.category.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())} />
+                        <DetailRow label="Category" value={titleCaseCategory(movie.category)} />
                         {movie.contentRating && <DetailRow label="Rating" value={movie.contentRating} />}
                         {movie.genres.length > 0 && <DetailRow label="Genres" value={movie.genres.join(', ')} />}
                     </View>
                 </View>
 
-                {/* ── CTA ──────────────────────────────────────────────────── */}
                 <View style={styles.ctaWrap}>
                     <TouchableOpacity
                         style={styles.ctaBtn}
                         activeOpacity={0.85}
                         onPress={() =>
-                            Linking.openURL(`https://www.youtube.com/results?search_query=${encodeURIComponent(movie.title + ' official trailer')}`)
+                            Linking.openURL(
+                                `https://www.youtube.com/results?search_query=${encodeURIComponent(movie.title + ' official trailer')}`,
+                            )
                         }
                     >
                         <FontAwesome name="youtube-play" size={18} color="#FFFFFF" style={{ marginRight: 8 }} />
@@ -164,8 +155,6 @@ function DetailRow({ label, value }: { label: string; value: string }) {
     );
 }
 
-// ─── Styles ───────────────────────────────────────────────────────────────────
-
 const styles = StyleSheet.create({
     root: { flex: 1, backgroundColor: '#0D0D1A' },
 
@@ -179,37 +168,30 @@ const styles = StyleSheet.create({
         alignItems: 'center', justifyContent: 'center',
     },
     ratingPill: {
-        position: 'absolute', top: 16, right: 16, flexDirection: 'row', alignItems: 'center', gap: 4,
+        position: 'absolute', top: 16, right: 16,
         backgroundColor: 'rgba(0,0,0,0.65)', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 20,
     },
     ratingPillText: { color: '#F5A623', fontWeight: '800', fontSize: 15 },
-    ratingVotes: { color: 'rgba(255,255,255,0.5)', fontSize: 10 },
 
-    /* Poster + title row */
     posterRowWrap: { flexDirection: 'row', alignItems: 'flex-end', paddingHorizontal: 20, marginTop: -60, gap: 14 },
     posterSmall: { width: 90, height: 135, borderRadius: 12, borderWidth: 2, borderColor: '#252338' },
     titleBlock: { flex: 1, paddingBottom: 6 },
     movieTitle: { fontSize: 20, fontWeight: '900', color: '#FFFFFF', lineHeight: 26 },
     movieYear: { fontSize: 12, color: '#555272', marginTop: 4 },
-    movieStars: { fontSize: 14, marginTop: 4 },
 
-    /* Genres */
     genreRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: 20, marginTop: 14 },
     genrePill: { backgroundColor: '#1A1829', borderRadius: 12, paddingHorizontal: 12, paddingVertical: 5, borderWidth: 1, borderColor: '#252338' },
     genrePillText: { fontSize: 12, fontWeight: '700', color: '#6C63FF' },
 
-    /* Sections */
     section: { paddingHorizontal: 20, marginTop: 22 },
     sectionTitle: { fontSize: 16, fontWeight: '800', color: '#FFFFFF', marginBottom: 10 },
     overview: { fontSize: 14, color: '#9592A8', lineHeight: 22 },
 
-    /* Details card */
     detailsCard: { backgroundColor: '#1A1829', borderRadius: 16, padding: 16, borderWidth: 1, borderColor: '#252338' },
     detailRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#252338' },
     detailLabel: { fontSize: 12, color: '#555272', fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5, flex: 1 },
     detailValue: { fontSize: 13, color: '#FFFFFF', fontWeight: '600', flex: 2, textAlign: 'right' },
 
-    /* CTAs */
     ctaWrap: { paddingHorizontal: 20, marginTop: 24, gap: 10 },
     ctaBtn: {
         flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
@@ -223,10 +205,10 @@ const styles = StyleSheet.create({
     },
     ctaBtnSecondaryText: { color: '#6C63FF', fontSize: 14, fontWeight: '700' },
 
-    /* Not found */
     notFound: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 40 },
     notFoundEmoji: { fontSize: 48 },
     notFoundTitle: { fontSize: 20, fontWeight: '700', color: '#FFFFFF' },
     backBtnSmall: { marginTop: 8, backgroundColor: '#6C63FF', paddingHorizontal: 28, paddingVertical: 12, borderRadius: 24 },
     backBtnSmallText: { color: '#FFFFFF', fontWeight: '700', fontSize: 15 },
 });
+

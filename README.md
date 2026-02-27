@@ -1,6 +1,12 @@
-# Welcome to your Expo app 👋
+# KantoFlix 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Basic React Native (Expo) app for browsing movies.
+
+## Requirements checklist
+
+- Two interconnected screens (Movies + Discover + Detail)
+- Global state management (`store/movie-context.tsx`)
+- Data from an open REST API (TMDB)
 
 ## Get started
 
@@ -15,6 +21,12 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npx expo start
    ```
+
+## Build APK (EAS)
+
+```bash
+npx eas-cli@latest build --platform android --profile preview
+```
 
 In the output, you'll find options to open the app in a
 

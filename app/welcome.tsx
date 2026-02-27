@@ -14,17 +14,17 @@ export default function WelcomeScreen() {
             {/* Logo Area */}
             <View style={styles.logoContainer}>
                 <Text style={styles.logoText}>
-                    WaraChow
+                    KantoFlix
                 </Text>
-                <Text style={styles.tagline}>Delivering dangerously delicious food items...</Text>
+                <Text style={styles.tagline}>Find something great to watch tonight.</Text>
             </View>
 
             {/* Bottom Content */}
             <View style={styles.bottomContent}>
-                <Text style={styles.welcomeTitle}>Welcome to WaraChow</Text>
+                <Text style={styles.welcomeTitle}>Welcome to KantoFlix</Text>
                 <Text style={styles.welcomeSubtitle}>
-                    Order the best meals in Lagos and have them delivered to your doorstep
-                    in little or no time. Doesn't that sound delicious???
+                    Browse trending movies, explore categories, and open a film to see details
+                    and watch the trailer.
                 </Text>
 
                 {/* Arrow Button */}

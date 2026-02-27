@@ -80,7 +80,7 @@ function MiniCard({ item }: { item: Movie }) {
       style={mini.card}
       activeOpacity={0.8}
       onPress={() =>
-        router.push({ pathname: "/restaurant/[id]", params: { id: item.id } })
+        router.push({ pathname: "/movie/[id]" as any, params: { id: item.id } })
       }
     >
       <Image
@@ -262,7 +262,7 @@ export default function DiscoverScreen() {
                 activeOpacity={0.8}
                 onPress={() =>
                   router.push({
-                    pathname: "/restaurant/[id]",
+                    pathname: "/movie/[id]" as any,
                     params: { id: item.id },
                   })
                 }

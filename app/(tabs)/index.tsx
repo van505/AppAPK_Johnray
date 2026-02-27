@@ -55,7 +55,7 @@ function MovieCard({ item }: { item: Movie }) {
       style={styles.card}
       activeOpacity={0.8}
       onPress={() =>
-        router.push({ pathname: "/restaurant/[id]", params: { id: item.id } })
+        router.push({ pathname: "/movie/[id]" as any, params: { id: item.id } })
       }
     >
       <Image
@@ -115,7 +115,7 @@ function ErrorState({
   return (
     <View style={styles.centerWrap}>
       <Text style={styles.stateEmoji}>⚠️</Text>
-      <Text style={styles.stateTitle}>Couldn't load movies</Text>
+      <Text style={styles.stateTitle}>Couldn’t load movies</Text>
       <Text style={styles.stateSub}>{message}</Text>
       <TouchableOpacity style={styles.retryBtn} onPress={onRetry}>
         <Text style={styles.retryBtnText}>Try Again</Text>

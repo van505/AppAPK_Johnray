@@ -133,7 +133,7 @@ export function MovieProvider({ children }: { children: React.ReactNode }) {
                     { category: 'upcoming', path: '/movie/upcoming' },
                 ];
 
-                const allMovies: Movie[] = [];
+                const movieMap = new Map<number, Movie>();
 
                 for (const { category, path } of endpoints) {
                     const url = `${TMDB_BASE}${path}?api_key=${TMDB_API_KEY}&language=en-US&page=1`;
@@ -143,10 +143,15 @@ export function MovieProvider({ children }: { children: React.ReactNode }) {
                     }
                     const json = (await res.json()) as { results?: TmdbMovie[] };
                     const mapped = (json.results ?? []).map((m) => mapTmdbMovie(m, category));
-                    allMovies.push(...mapped);
+                    for (const mv of mapped) {
+                        if (!movieMap.has(mv.id)) {
+                            movieMap.set(mv.id, mv);
+                        }
+                    }
                 }
 
-                dispatch({ type: 'SET_MOVIES', payload: allMovies });
+                const uniqueMovies = Array.from(movieMap.values());
+                dispatch({ type: 'SET_MOVIES', payload: uniqueMovies });
             }
         } catch (err) {
             console.error('Failed to fetch movies from TMDB', err);
